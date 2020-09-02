@@ -16,7 +16,7 @@ tic;
 while ~finished && count<maxSeq
     %read a block of sequence
     disp(['block: ' num2str(count/blocksize+1) '. There are ' num2str(numBlock-count/blocksize-1) ' blocks to go']);
-    [h,s]=fastaread('C:\Users\Desktop\Genome Scripts\all_introns.fa', 'Blockread', [count+1, count+blocksize]);
+    [h,s]=fastaread('C:\Users\Desktop\Genome Scripts\Demo10k_introns.fa', 'Blockread', [count+1, count+blocksize]);
     %calculate the G frequency by nucleotide
     sMat=char(nan(numel(s), threshNucleotide));
     for i=1:numel(s)

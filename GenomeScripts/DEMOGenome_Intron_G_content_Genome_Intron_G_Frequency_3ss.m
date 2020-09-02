@@ -16,7 +16,7 @@ tic;
 while ~finished && count<maxSeq
     %read a block of sequence
     disp(['block: ' num2str(count/blocksize+1) '. There are ' num2str(numBlock-count/blocksize-1) ' blocks to go']);
-    [h,s]=fastaread('C:\Users\Desktop\Genome Scripts\all_introns.fa', 'Blockread', [count+1, count+blocksize]);
+    [h,s]=fastaread('C:\Users\Desktop\Demo10k_introns.fa', 'Blockread', [count+1, count+blocksize]);
     %calculate the G frequency by nucleotide
     sMat=char(nan(numel(s), threshNucleotide));
     for i=1:numel(s)
@@ -57,10 +57,10 @@ nucleotideG=nucleotideG./nucleotideTotal;
 figure;
 subplot(1,2,1);
 hist(freqG,0.05:0.1:1);
-title(['Histogram of G content']);
+title(['Histogram of G content DEMO']);
 xlabel('G content');
 subplot(1,2,2);
 plot(1:threshNucleotide, nucleotideG);
-title('G_{freq} by nucleotide');
+title('G_{freq} by nucleotide DEMO');
 xlabel('Nt position from 3SS');
 ylim([0 1]);
