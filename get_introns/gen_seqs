@@ -1,0 +1,19 @@
+#!/bin/bash
+
+wget https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz
+gunzip hg19.fa.gz
+
+wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/genes/hg19.ncbiRefSeq.gtf.gz
+gunzip hg19.ncbiRefSeq.gtf.gz
+
+python3 scripts/make_bed_talhouarne.py
+
+bedtools getfasta -fi hg19.fa -bed talhouarne_hela.bed -fo talhouarne_hela.fa -name -s
+
+Rscript scripts/gen_introns.r
+
+sort -k1,1 -k2,2g all_introns.bed > all_introns.sorted.bed
+
+python3 scripts/cleanup.py all_introns.sorted.bed > all_introns.sorted.clean.bed
+
+bedtools getfasta -fi hg19.fa -bed all_introns.sorted.clean.bed -fo all_introns.fa -s
