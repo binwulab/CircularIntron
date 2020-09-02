@@ -1,0 +1,16 @@
+# generate library with a length 100-600 nt and trim last 30 nt
+
+import sys
+from Bio import SeqIO
+input_file = sys.argv[1]
+for record in SeqIO.parse(input_file, "fasta"):
+    l=int(len(record.seq))
+    if l>100 and l<600:
+     print(">%s\n%s" % (record.id, record.seq[1:-30]))
+
+
+
+
+#calculate secondary structrue (consider G quadruplex)
+
+RNAfold -g <input.fasta >output.txt
