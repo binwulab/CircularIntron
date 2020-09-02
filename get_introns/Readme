@@ -1,0 +1,38 @@
+Intron sequence retrieval
+Notes
+To work, the script requires Dataset_S01 (pnas.1808816115.sd01.xlsx) from Talhouarne GJS, Gall JG PNAS (2018) to be in the same directory.
+
+Download at: https://www.pnas.org/highwire/filestream/821539/field_highwire_adjunct_files/1/pnas.1808816115.sd01.xlsx
+
+Also needed to run: - python3 (with pandas and numpy) - bedtools - R (Rscript) - Bioconductor GenomicFeatures library for R (find at https://bioconductor.org/packages/release/bioc/html/GenomicFeatures.html)
+
+Run bash script gen_seqs to run everything: Script will download some files (hg19 genome and RefSeq annotations) There will be some missing chromosome warnings from bedtools
+
+sh ./gen_seqs
+
+Script output for downstream processing is talhouarne_hela.fa and all_introns.fa
+
+The RefSeq annotation file used is from January 10, 2020. Below code might download a newer version.
+
+Walk through below highlights what is done in the script
+
+Walk through (optional)
+Download hg19 genome and RefSeq genes and unzip
+
+sh wget https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz gunzip hg19.fa.gz wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/genes/hg19.ncbiRefSeq.gtf.gz gunzip hg19.ncbiRefSeq.gtf.gz
+
+Turn Excel document from X into usable bed files
+
+sh python3 make_bed_talhouarne.py
+
+Convert above-generated .bed file into a .fa file with all the sequences
+
+sh bedtools getfasta -fi hg19 -bed talhouarne_hela.bed -fo talhouarne_hela.fa -name -s
+
+Run R script to get introns using the genome and gtf file There will be warning messages
+
+sh Rscript gen_introns.r
+
+Sorting and extracting sequences for all genomic introns There will be some missing chromosome warnings from bedtools Note: above sorting is unnecessary and the clean up script is to fix a scientific notation issue that can arise
+
+sh sort -k1,1 -k2,2n all_introns.bed > all_introns.sorted.bed python3 scripts/cleanup.py all_introns.sorted.bed > all_introns.sorted.clean.bed bedtools getfasta -fi hg19 -bed all_introns.sorted.bed -fo all_introns.fa -s
