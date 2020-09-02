@@ -4,7 +4,7 @@ blocksize=2000;% number of sequences in one block (run as a set)
 count=0;
 minLen=55;% minimum length of sequence before trimming
 begin=30;% starting from 30th nucleotide is an equivalent of trimming sequemce
-numBlock=5; % number of blocks that will be run ( up to 103)
+numBlock=1; % number of blocks that will be run ( up to 103)
 threshNucleotide=100;% number of nt ploted for G frequency
 thresh=60000;% maximum length of sequnce
 maxSeq=min([blocksize*numBlock, 207000]);
@@ -16,7 +16,7 @@ tic;
 while ~finished && count<maxSeq
     %read a block of sequence
     disp(['block: ' num2str(count/blocksize+1) '. There are ' num2str(numBlock-count/blocksize-1) ' blocks to go']);
-    [h,s]=fastaread('C:\Users\Desktop\Demo10k_introns.fa', 'Blockread', [count+1, count+blocksize]);
+    [h,s]=fastaread('C:\Users\Desktop\Demo2k_introns.fa', 'Blockread', [count+1, count+blocksize]);
     %calculate the G frequency by nucleotide
     sMat=char(nan(numel(s), threshNucleotide));
     for i=1:numel(s)
